@@ -16,6 +16,39 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer_data:/data
+
+  jellyfin:
+    # Image jellyfin officielle
+    image: jellyfin/jellyfin:latest
+    # Nom donné au conteneur 
+    container_name: jellyfin
+    # Dans le cas où le conteneur s'arrête/crash, il est automatiquement relancé 
+    restart: unless-stopped
+    # Réseau dans lequel le conteneur va s'exécuter
+    networks: 
+      - cloud
+    # Mappage de port (du port 8096 du conteneur vers le port 8096 de la machine hôte)
+    ports:
+      - 8096:8096
+    environment:
+      - TZ=America/Montreal
+    # Volumes du conteneur: mappe des répertoires du conteneur vers des répertoire de la machine hôte
+    volumes:
+      - jellyfin_data:/config
+      - /mnt/media/Movies:/movies
+      - /mnt/media/TV:/tv
+
+  homepage:
+    image: ghcr.io/gethomepage/homepage:latest
+    container_name: homepage
+    ports:
+      - 3000:3000
+    volumes:
+      - /path/to/config:/app/config # Make sure your local config directory exists
+      - /var/run/docker.sock:/var/run/docker.sock # (optional) For docker integrations
+    environment:
+      HOMEPAGE_ALLOWED_HOSTS: gethomepage.dev # required, may need port. See gethomepage.dev/installation/#homepage_allowed_hosts
+  
 # Définition des volumes des conteneurs (portainer et bd)
 volumes:
     portainer_data:
