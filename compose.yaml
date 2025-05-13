@@ -52,6 +52,7 @@ services:
 # Définition des volumes des conteneurs (portainer et bd)
 volumes:
     portainer_data:
+    jellyfin_data:
 # Création du réseau cloud (ou les conteneurs vont être lancés)
 networks:
     cloud:
