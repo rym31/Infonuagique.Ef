@@ -1,0 +1,25 @@
+services:
+  portainer:
+    # Image de portainer officielle (ce=community edition, alpine=légère) 
+    image: portainer/portainer-ce:alpine
+    # Nom donné au conteneur 
+    container_name: portainer
+    # Dans le cas où le conteneur s'arrête/crash, il est automatiquement relancé 
+    restart: unless-stopped
+    # Réseau docker dans lequel le conteneur va s'exécuter
+    networks: 
+        - cloud
+    # Mappage de port (du port 9000 du conteneur vers le port 9000 de la machine hôte)
+    ports:
+      - 9000:9000
+    # Volumes 
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+# Définition des volumes des conteneurs (portainer et bd)
+volumes:
+    portainer_data:
+# Création du réseau cloud (ou les conteneurs vont être lancés)
+networks:
+    cloud:
+        driver: bridge
